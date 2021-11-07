@@ -14,8 +14,8 @@ enum class InputType {
 
 enum class MouseFlags {
     NONE =        0,
-	LEFT_DOWN =   1 << 0,
-	LEFT_UP =     1 << 1,
+    LEFT_DOWN =   1 << 0,
+    LEFT_UP =     1 << 1,
     RIGHT_DOWN =  1 << 2,
     RIGHT_UP =    1 << 3,
     MIDDLE_DOWN = 1 << 4,
@@ -131,62 +131,55 @@ enum class ScanCode : uint16_t {
     NumpadMinus = 74,
 };
 
-enum class KeyState : uint16_t {
-    DOWN = 0,
-    UP = 1,
-    RIGHT_DOWN = 2,
-    RIGHT_UP = 3
-};
-
 class MOUSE_IOCTL_STRUCT
 {
 public:
-	int32_t unknown0; //0x0000
-	InputType input_type; //0x0004
-	int32_t unknown1; //0x0008
-	MouseFlags flags; //0x000C
-	int32_t unknown2; //0x0010
-	int32_t x; //0x0014
-	int32_t y; //0x0018
-	int32_t unknown3; //0x001C
+    int32_t unknown0; //0x0000
+    InputType input_type; //0x0004
+    int32_t unknown1; //0x0008
+    MouseFlags flags; //0x000C
+    int32_t unknown2; //0x0010
+    int32_t x; //0x0014
+    int32_t y; //0x0018
+    int32_t unknown3; //0x001C
 }; //Size: 0x0020
 
 class KEYBOARD_IOCTL_STRUCT 
 {
 public:
-	int32_t unknown0; //0x0000
-	InputType input_type; //0x0004
-	int16_t unknown1; //0x0008
+    int32_t unknown0; //0x0000
+    InputType input_type; //0x0004
+    int16_t unknown1; //0x0008
     int16_t scan_code; //0x000A
     int16_t state; //0x000c
     int16_t unknown3; //0x000E
-	int32_t unknown2; //0x0010
-	int32_t x; //0x0014
-	int32_t y; //0x0018
-	int32_t unknown4; //0x001C
+    int32_t unknown2; //0x0010
+    int32_t x; //0x0014
+    int32_t y; //0x0018
+    int32_t unknown4; //0x001C
 }; //Size: 0x0020
 
 namespace rzctl {
-	/*
-	* finds the symbolic link that contains name RZCONTROL and opens a handle to the respective device
-	*/
-	__declspec(dllexport) bool init();
+    /*
+    * finds the symbolic link that contains name RZCONTROL and opens a handle to the respective device
+    */
+    __declspec(dllexport) bool init();
 
-	/*
-	* if going from point, x and y will be the offset from current mouse position
-	* otherwise it will be a number in range of 1 to 65536, where 1, 1 is top left of screen
-	* if using multiple monitors the input values remain the same, but outcome different, i just don't recommend bothering with this bs
-	* note: x and/or y can not be 0 unless going from start point	
-	*/
-	__declspec(dllexport) void mouse_move(int x, int y, bool from_start_point = true);
-	__declspec(dllexport) void mouse_click(int flags);
+    /*
+    * if going from point, x and y will be the offset from current mouse position
+    * otherwise it will be a number in range of 1 to 65536, where 1, 1 is top left of screen
+    * if using multiple monitors the input values remain the same, but outcome different, i just don't recommend bothering with this bs
+    * note: x and/or y can not be 0 unless going from start point	
+    */
+    __declspec(dllexport) void mouse_move(int x, int y, bool from_start_point = true);
+    __declspec(dllexport) void mouse_click(int flags);
 
     /* keyboard stuff */
 
     __declspec(dllexport) void key_state(int16_t scan_code, int16_t key_state);
 
-	/*
-	* communicates to the device
-	*/
-	void _impl_ioctl(LPVOID in_buffer, DWORD in_buffer_size);
+    /*
+    * communicates to the device
+    */
+    void _impl_ioctl(LPVOID in_buffer, DWORD in_buffer_size);
 }
